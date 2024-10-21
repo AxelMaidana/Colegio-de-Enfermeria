@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import UserProfile from '../components/UserProfile.jsx';
+import LoadingSpinner from '../components/LoadingSpinner.astro';
+---
+
+<Layout title="Perfil">
+  <main class="container mx-auto mt-8 p-4">
+    <h1 class="text-3xl font-bold mb-4">Perfil de Usuario</h1>
+    <LoadingSpinner id="loading-spinner" />
+    <UserProfile client:load />
+  </main>
+</Layout>
+
+<script>
+  function hideLoadingSpinner() {
+    const loadingSpinner = document.getElementById('loading-spinner');
+    if (loadingSpinner) {
+      loadingSpinner.style.display = 'none';
+    }
+  }
+
+  function checkAdminDashboardLoaded() {
+    const adminDashboardLoading = document.getElementById('admin-dashboard-loading');
+    if (!adminDashboardLoading) {
+      hideLoadingSpinner();
+    } else {
+      setTimeout(checkAdminDashboardLoaded, 500); // Check again after 100ms
+    }
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    checkAdminDashboardLoaded();
+  });
+</script>

@@ -1,0 +1,41 @@
+---
+// src/components/LoadingSpinner.astro
+---
+
+<div id="loading-spinner" class="loading-spinner">
+    <div class="spinner"></div>
+    <div class="block">Cargando...</div>
+</div>
+
+<style>
+  .loading-spinner {
+    display: flex;
+    flex-direction: column; /* Cambiar la dirección a columna */
+    justify-content: center;
+    align-items: center; /* Centrar horizontalmente */
+    height: 100vh;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+    font-size: 20px; /* Ajusta el tamaño de la fuente */
+    color: #3498db; /* Cambia el color del texto si lo deseas */
+  }
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px; /* Espacio entre el spinner y el texto */
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
