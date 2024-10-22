@@ -1,37 +1,13 @@
 ---
 // src/pages/admin/dashboard.astro
 import Layout from '../../layouts/Layout.astro';
-import AdminDashboard from '../../components/admin/AdminDashboard.jsx';
-import LoadingSpinner from '../../components/common/LoadingSpinner.astro';
-import UserTable from '../../components/admin/UserTable.jsx';
+import UserTable from '../../components/admin/UserTable';
 ---
 
 <Layout title="Dashboard de Admin">
   <main class="container mx-auto mt-8 p-4 h-screen">
     <h1 class="text-3xl font-bold mb-4">Dashboard de Admin</h1>
-    <LoadingSpinner id="loading-spinner" />
     <UserTable client:load />
   </main>
 </Layout>
 
-<script>
-  function hideLoadingSpinner() {
-    const loadingSpinner = document.getElementById('loading-spinner');
-    if (loadingSpinner) {
-      loadingSpinner.style.display = 'none';
-    }
-  }
-
-  function checkAdminDashboardLoaded() {
-    const adminDashboardLoading = document.getElementById('admin-dashboard-loading');
-    if (!adminDashboardLoading) {
-      hideLoadingSpinner();
-    } else {
-      setTimeout(checkAdminDashboardLoaded, 500); // Check again after 100ms
-    }
-  }
-
-  document.addEventListener('astro:page-load', () => {
-    checkAdminDashboardLoaded();
-  });
-</script>

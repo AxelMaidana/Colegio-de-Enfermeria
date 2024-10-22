@@ -1,0 +1,39 @@
+---
+const { image1, title1, alt, description1, image2, title2, description2, TitleSection } = Astro.props;
+const hasSecondTeacher = image2 && title2 && description2; // Verificamos si existe un segundo docente
+---
+
+<!-- Título del contenedor -->
+<h3 class="text-2xl text-center text-customBlack font-bold pl-4 pb-4 | md:text-3xl | lg:text-start lg:pl-10">{TitleSection}</h3>
+
+<!-- Contenedor de docentes -->
+<div class="container mx-auto py-4 grid grid-cols-1 gap-10 justify-center items-center lg:grid-cols-[1fr_auto_1fr] lg:gap-0 lg:px-16">
+  <!-- Primera columna -->
+  <div class="flex flex-col lg:flex-row items-center space-x-0 md:space-x-4 space-y-4 lg:space-y-0">
+    <!-- Imagen redonda -->
+    <img src={image1} alt={alt} class="w-32 h-32 rounded-full object-cover bg-slate-100" />
+    <!-- Título y descripción -->
+    <div class="text-center lg:text-left">
+      <h2 class="text-xl font-semibold mb-2">{title1}</h2>
+      <p class="text-gray-700 md:max-w-md lg:max-w-md max-w-xs">{description1}</p>
+    </div>
+  </div>
+
+  <!-- Separador solo si hay un segundo docente -->
+  {hasSecondTeacher && (
+    <>
+      <div class="hidden lg:block h-24 border-l border-gray-300/50 lg:mx-24"></div>
+
+      <!-- Segunda columna -->
+      <div class="flex flex-col lg:flex-row items-center space-x-0 lg:space-x-4 space-y-4 lg:space-y-0">
+        <!-- Imagen redonda -->
+        <img src={image2} alt={alt} class="w-32 h-32 rounded-full object-cover bg-slate-100" />
+        <!-- Título y descripción -->
+        <div class="text-center lg:text-left">
+          <h2 class="text-xl font-semibold mb-2">{title2}</h2>
+          <p class="text-gray-700 md:max-w-md lg:max-w-md max-w-xs">{description2}</p>
+        </div>
+      </div>
+    </>
+  )}
+</div>

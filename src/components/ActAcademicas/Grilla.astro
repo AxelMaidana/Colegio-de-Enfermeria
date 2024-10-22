@@ -1,0 +1,26 @@
+---
+import CardCurso from './CardCurso.astro';
+import { cursos } from '../js/cursos.js';
+---
+
+<div class="container mx-auto mb-auto">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
+    {Object.entries(cursos).map(([slug, curso]) => (
+      <div class="flex justify-center">
+        <a href={`/cursos/${slug}`}>
+          <CardCurso 
+            title={curso.title}
+            description={curso.description}
+            image={curso.image}
+            duration={curso.duration}
+            alt={curso.alt}
+            hours={curso.hours}
+            day={curso.day}
+            modality={curso.modality}
+            price={curso.price}
+          />
+        </a>
+      </div>
+    ))}
+  </div>
+</div>

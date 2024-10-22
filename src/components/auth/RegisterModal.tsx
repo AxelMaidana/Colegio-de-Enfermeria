@@ -1,20 +1,21 @@
-
 import React, { useState } from 'react';
 import { auth, db } from '../../firebase/client';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { setDoc, doc } from 'firebase/firestore';
 
-//inicializar el modal en hidden y abrirlo
-
-
 // Abre el modal
-export const openModal = (modalId) => {
-  document.getElementById(modalId).classList.remove('hidden');
+export const initializeModal = (modalId: string) => {
+  document.getElementById(modalId)?.classList.add('hidden');
+};
+
+// Inicializar el modal en hidden y abrirlo
+export const openModal = (modalId: string) => {
+  document.getElementById(modalId)?.classList.remove('hidden');
 };
 
 // Cierra el modal
-export const closeModal = (modalId) => {
-  document.getElementById(modalId).classList.add('hidden');
+export const closeModal = (modalId: string) => {
+  document.getElementById(modalId)?.classList.add('hidden');
 };
 
 const RegisterModal = () => {
@@ -22,29 +23,60 @@ const RegisterModal = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [birthday, setBirthday] = useState('');
-  const [username, setUsername] = useState('');
-  const [role, setRole] = useState('user');
+  const [lastname, setLastname] = useState('');
+  const [role, setRole] = useState('');
+  const [dni, setDni] = useState(''); 
+  const [matricula, setMatricula] = useState(''); 
+  const [lugarDeOrigen, setLugarDeOrigen] = useState(''); 
+  const [infoExtra, setInfoExtra] = useState(''); 
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
+      // Crea el usuario en Firebase, pero no inicies sesión automáticamente.
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
+  
+      // Guarda los datos en Firestore
       await setDoc(doc(db, 'users', userCredential.user.uid), {
         name,
         email,
         birthday,
-        username,
-        role
-      });
+        lastname,
+        role,
+        dni,
+        matricula,
+        lugarDeOrigen,
+        infoExtra,
+      }, { merge: true });
+  
+      // Cierra el modal
+      closeModal('register-modal');
+      
+      // Limpiar los campos del formulario
+      setEmail('');
+      setPassword('');
+      setName('');
+      setBirthday('');
+      setLastname('');
+      setRole('');
+      setDni('');
+      setMatricula('');
+      setLugarDeOrigen('');
+      setInfoExtra('');
+  
+      // Opcional: refrescar la página (si es necesario)
       window.location.reload();
+  
     } catch (error) {
       console.error('Error al registrarse:', error);
+      alert(`Error al registrarse: ${error.message}`); // Muestra un mensaje de error al usuario
     }
   };
+  
 
   return (
-    <div id="register-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50" aria-hidden="true">
+    <div id="register-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <h3 className="text-lg font-bold mb-4">Registrarse</h3>
         <form onSubmit={handleRegister}>
@@ -53,6 +85,13 @@ const RegisterModal = () => {
             placeholder="Nombre"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <input
+            type="text"
+            placeholder="Apellido"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
             className="w-full p-2 mb-4 border rounded"
           />
           <input
@@ -71,9 +110,30 @@ const RegisterModal = () => {
           />
           <input
             type="text"
-            placeholder="Nombre de usuario"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="DNI"
+            value={dni}
+            onChange={(e) => setDni(e.target.value)}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <input
+            type="text"
+            placeholder="Matrícula"
+            value={matricula}
+            onChange={(e) => setMatricula(e.target.value)}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <input
+            type="text"
+            placeholder="Lugar de Origen"
+            value={lugarDeOrigen}
+            onChange={(e) => setLugarDeOrigen(e.target.value)}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <input
+            type="text"
+            placeholder="Información Extra"
+            value={infoExtra}
+            onChange={(e) => setInfoExtra(e.target.value)}
             className="w-full p-2 mb-4 border rounded"
           />
           <select

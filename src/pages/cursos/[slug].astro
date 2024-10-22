@@ -1,0 +1,70 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Pastilla from '../../components/ActAcademicas/detalle/Pastilla.astro';
+import Banner from '../../components/ActAcademicas/detalle/Banner.astro';
+import TextoPDF from '../../components/ActAcademicas/TextoInformativo.astro';
+import SectionDocente from '../../components/ActAcademicas/detalle/SectionDocente.astro'; 
+import InfoExtra from '../../components/ActAcademicas/detalle/InfoExtra.astro';
+import CardSide from '../../components/ActAcademicas/detalle/CardSide.astro';
+import Certificado from '../../components/ActAcademicas/detalle/Certificado.astro';
+import {cursos} from '../../components/js/cursos.js';
+
+// src/pages/cursos/[slug].astro
+const { slug } = Astro.params;
+
+const curso = cursos[slug];
+if (!curso) {
+  throw new Error("Curso no encontrado");
+}
+
+const hasSecondTeacher = curso.Teachers.length > 1; // Verifica si hay un segundo docente
+
+---
+
+<Layout title={curso.title}>
+    <Pastilla title = "Información del curso"/>
+    <Banner 
+      title={curso.title}
+      image={curso.image}
+      price={curso.price}
+      modality={curso.modality}    
+      duration={curso.duration}
+      description={curso.description}
+    />
+    <TextoPDF title="Descargar el contenido del curso" sizeText="text-md md:text-xl" borderRadius="rounded-3xl">
+      <a href="/media/Certificado.pdf" download="Certificado.pdf" class="text-md font-light underline">
+        Descargar el programa en <strong>PDF</strong>
+      </a>
+    </TextoPDF>
+    
+    <SectionDocente 
+      TitleSection="Profesores a cargo de la clase"
+      image1="https://i.pinimg.com/564x/25/ee/de/25eedef494e9b4ce02b14990c9b5db2d.jpg" 
+      alt=""
+      title1={curso.Teachers[0].name}
+      description1={curso.Teachers[0].description} 
+      { ...(hasSecondTeacher && {
+        image2: "https://i.pinimg.com/564x/25/ee/de/25eedef494e9b4ce02b14990c9b5db2d.jpg",
+        title2: curso.Teachers[1].name,
+        description2: curso.Teachers[1].description
+      })}
+    />
+    
+    <InfoExtra 
+      TitleSection="Información extra"
+      duration={curso.duration}
+      hours={curso.hours}
+      day={curso.day}
+      modality={curso.modality}
+    />
+
+    <CardSide 
+      title={curso.title}
+      hours={curso.hours}
+      day={curso.day}
+      modality={curso.modality}
+      price={curso.price}
+    />
+    
+    <Certificado/>
+</Layout>
