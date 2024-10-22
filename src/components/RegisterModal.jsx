@@ -3,6 +3,21 @@ import { auth, db } from '../firebase/client';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { setDoc, doc } from 'firebase/firestore';
 
+// Abre el modal
+export const openModal = (modalId) => {
+  document.getElementById(modalId).classList.remove('hidden');
+};
+
+// Cierra el modal
+export const closeModal = (modalId) => {
+  document.getElementById(modalId).classList.add('hidden');
+};
+
+// Inicializa el modal (opcional)
+export const initializeModal = (modalId) => {
+  openModal(modalId);
+};
+
 const RegisterModal = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -82,7 +97,7 @@ const RegisterModal = () => {
           </button>
         </form>
         <button
-          onClick={() => document.getElementById('register-modal').classList.add('hidden')}
+          onClick={() => closeModal('register-modal')}
           className="mt-4 w-full bg-gray-300 text-gray-800 p-2 rounded hover:bg-gray-400"
         >
           Cerrar

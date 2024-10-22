@@ -37,12 +37,12 @@ export default function AdminDashboard() {
   }
 
   if (!isAdmin) {
-    return <p className="text-red-500">No tienes permiso para ver esta página.</p>;
+    window.location.href = '/noLoggedIn';
   }
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full bg-white text-left">
+      <table className="min-w-full bg-white text-left"> 
         <thead>
           <tr>
             <th className="py-2 px-4 border-b">Nombre</th>
