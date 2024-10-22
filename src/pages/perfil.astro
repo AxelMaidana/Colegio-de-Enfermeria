@@ -1,11 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import UserProfile from '../components/UserProfile.jsx';
-import LoadingSpinner from '../components/LoadingSpinner.astro';
+import UserProfile from '../components/user/UserProfile.jsx';
+import LoadingSpinner from '../components/common/LoadingSpinner.astro';
 ---
 
 <Layout title="Perfil">
-  <main class="container mx-auto mt-8 p-4">
+  <main class="container mx-auto mt-8 p-4 h-screen">
     <h1 class="text-3xl font-bold mb-4">Perfil de Usuario</h1>
     <LoadingSpinner id="loading-spinner" />
     <UserProfile client:load />

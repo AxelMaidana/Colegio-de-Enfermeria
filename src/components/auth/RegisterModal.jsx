@@ -1,7 +1,11 @@
+
 import React, { useState } from 'react';
-import { auth, db } from '../firebase/client';
+import { auth, db } from '../../firebase/client';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { setDoc, doc } from 'firebase/firestore';
+
+//inicializar el modal en hidden y abrirlo
+
 
 // Abre el modal
 export const openModal = (modalId) => {
@@ -11,11 +15,6 @@ export const openModal = (modalId) => {
 // Cierra el modal
 export const closeModal = (modalId) => {
   document.getElementById(modalId).classList.add('hidden');
-};
-
-// Inicializa el modal (opcional)
-export const initializeModal = (modalId) => {
-  openModal(modalId);
 };
 
 const RegisterModal = () => {
@@ -45,7 +44,7 @@ const RegisterModal = () => {
   };
 
   return (
-    <div id="register-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div id="register-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50" aria-hidden="true">
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <h3 className="text-lg font-bold mb-4">Registrarse</h3>
         <form onSubmit={handleRegister}>

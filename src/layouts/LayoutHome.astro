@@ -21,7 +21,7 @@ const { title } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
-	<body>
+	<body class="flex flex-col flex-grow">
 		<ViewTransitions />
 		<Header />
 		<Nav client:load/>
@@ -31,6 +31,7 @@ const { title } = Astro.props;
 		copyrightText="Todos los derechos reservados"
 		instagramLink="https://www.instagram.com/cech.instituto/"
 		facebookLink="https://www.facebook.com/cech.instituto/"
+		padding="md:pt-8 md:-mt-6 pt-10 -mt-6"
 		/>
 	</body>
 </html>

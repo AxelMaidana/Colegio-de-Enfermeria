@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { db } from '../firebase/client'; 
-import { openModal, closeModal, initializeModal } from './RegisterModal';
+import { collection, getDocs, getDoc, updateDoc, doc } from 'firebase/firestore';
+import { auth, db } from '../../firebase/client'; 
+import { onAuthStateChanged } from 'firebase/auth';
+import { openModal, closeModal } from '../auth/RegisterModal.jsx';
 
 // UI Components
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -104,48 +105,66 @@ interface User {
   profileImageUrl: string; // Añadido para la URL de la imagen
 }
 
-const ITEMS_PER_PAGE = 3;
+const ITEMS_PER_PAGE = 1;
 
 const UserTable = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [editedUser, setEditedUser] = useState<User | null>(null); // Para almacenar el usuario que se está editando
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "users"));
-        const usersData: User[] = [];
-        querySnapshot.forEach(doc => {
-          const data = doc.data();
-          usersData.push({
-            id: doc.id,
-            name: data.name || '',
-            dni: data.dni || '',
-            matricula: data.matricula || '',
-            lugarDeOrigen: data.lugarDeOrigen || '',
-            infoExtra: data.infoExtra || '',
-            profileImageUrl: data.profileImageUrl || '', // Carga la URL de la imagen
-          });
-        });
-        setUsers(usersData);
-      } catch (error) {
-        console.error("Error fetching users: ", error);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Cambia esto para obtener el documento del usuario
+        const userDoc = doc(db, 'users', user.uid); // Obtén la referencia al documento
+        const userData = await getDoc(userDoc); // Usa getDoc para obtener el documento
+        if (userData.exists()) { // Verifica si el documento existe
+          const data = userData.data(); // Obtiene los datos del documento
+          if (data.role === 'admin') {
+            setIsAdmin(true);
+            fetchUsers(); // Llama a la función fetchUsers si es admin
+          } else {
+            window.location.href = '/noLoggedIn'; // Redirige si no es admin
+          }
+        } else {
+          console.error("No user data found");
+          window.location.href = '/noLoggedIn'; // Redirige si no se encontró el documento
+        }
+      } else {
+        window.location.href = '/'; // Redirige si no hay usuario
       }
-    };
-
-    fetchUsers();
+    });
+  
+    return () => unsubscribe();
   }, []);
+  
 
-  // Inicializar el modal cuando el componente se monta
-  useEffect(() => {
-    initializeModal('register-modal');
-    return () => {
-      document.removeEventListener('keydown', initializeModal);
-    };
-  }, []);
+  const fetchUsers = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      const usersData: User[] = [];
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        usersData.push({
+          id: doc.id,
+          name: data.name || '',
+          dni: data.dni || '',
+          matricula: data.matricula || '',
+          lugarDeOrigen: data.lugarDeOrigen || '',
+          infoExtra: data.infoExtra || '',
+          profileImageUrl: data.profileImageUrl || '', // Carga la URL de la imagen
+        });
+      });
+      setUsers(usersData);
+    } catch (error) {
+      console.error("Error fetching users: ", error);
+    }
+  };
+
+  
 
   const toggleRowExpansion = (userId: string) => {
     setExpandedRows(prev => 
@@ -188,6 +207,8 @@ const UserTable = () => {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
+
+  if (!isAdmin) return null; // No renderiza nada si no es admin
 
   return (
     <div className="space-y-4">

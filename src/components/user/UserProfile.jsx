@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { auth, db } from '../firebase/client';
+import { auth, db } from '../../firebase/client';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { PermissionsDropdown } from './PermissionsDropdown';

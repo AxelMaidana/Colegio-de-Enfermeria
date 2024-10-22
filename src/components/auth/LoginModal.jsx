@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { auth, db } from '../firebase/client';
+import { auth, db } from '../../firebase/client';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
@@ -42,7 +42,7 @@ const LoginModal = () => {
   };
 
   return (
-    <div id="login-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
+    <div id="login-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
       <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
         <h3 className="text-lg font-bold mb-4">Iniciar Sesión</h3>
         {error && <p className="text-red-500 mb-4">{error}</p>}
